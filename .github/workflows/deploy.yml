@@ -8,7 +8,7 @@ env:
   SERVICE_NAME: backend-service
   REGION: ${{ secrets.REGION }}
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
-  IMAGE: ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/my-app-repo/backend
+  IMAGE: ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/final-store-repo/backend
 
 jobs:
   deploy:
