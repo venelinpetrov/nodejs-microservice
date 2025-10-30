@@ -32,7 +32,6 @@ jobs:
 
     - name: Build and push Docker image with version info
       run: |
-        # Create build metadata
         BUILD_COMMIT=${{ github.sha }}
         BUILD_VERSION=${{ github.ref_name }}-${{ github.sha }}
         BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -42,13 +41,9 @@ jobs:
         echo "  Version: $BUILD_VERSION"
         echo "  Time: $BUILD_TIME"
 
-        gcloud builds submit . \
-          --tag $IMAGE \
-          -- \
-          --build-arg _BUILD_COMMIT=$BUILD_COMMIT \
-          --build-arg _BUILD_VERSION=$BUILD_VERSION \
-          --build-arg _BUILD_TIME=$BUILD_TIME
-
+        gcloud builds submit \
+          --config cloudbuild.yml \
+          --substitutions=_BUILD_COMMIT="$BUILD_COMMIT",_BUILD_VERSION="$BUILD_VERSION",_BUILD_TIME="$BUILD_TIME",_IMAGE="$IMAGE"
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy $SERVICE_NAME \
