@@ -1,0 +1,15 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - '-t'
+      - '${_IMAGE}'
+      - '--build-arg'
+      - '_BUILD_COMMIT=${_BUILD_COMMIT}'
+      - '--build-arg'
+      - '_BUILD_VERSION=${_BUILD_VERSION}'
+      - '--build-arg'
+      - '_BUILD_TIME=${_BUILD_TIME}'
+      - '.'
+images:
+  - '${_IMAGE}'
