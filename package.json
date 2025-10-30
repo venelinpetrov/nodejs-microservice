@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "NODE_ENV=development nodemon index.js | pino-pretty",
+    "dev": "NODE_ENV=development nodemon index.js",
     "lint": "eslint",
     "fix": "eslint --fix",
     "build-image": "gcloud builds submit --pack image=us-central1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/samples/microservice-template:manual",
