@@ -1,19 +1,21 @@
 name: Deploy NodeJS Microservice Sample
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - production
+      - staging
   workflow_dispatch:
 
 env:
-  SERVICE_NAME: backend-service
-  REGION: ${{ secrets.REGION }}
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
-  IMAGE: ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/final-store-repo/backend
+  REGION: ${{ secrets.REGION }}
+  SERVICE_NAME: ${{ github.ref_name == 'production' && 'backend-production' || 'backend-staging' }}
+  IMAGE: ${{ secrets.REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/final-store-repo/backend:${{ github.ref_name }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production
+    environment: ${{ github.ref_name }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
