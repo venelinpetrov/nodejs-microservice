@@ -42,11 +42,12 @@ jobs:
         echo "  Version: $BUILD_VERSION"
         echo "  Time: $BUILD_TIME"
 
-        gcloud builds submit \
+        gcloud builds submit . \
           --tag $IMAGE \
+          -- \
           --build-arg _BUILD_COMMIT=$BUILD_COMMIT \
           --build-arg _BUILD_VERSION=$BUILD_VERSION \
-          --build-arg _BUILD_TIME=$BUILD_TIME .
+          --build-arg _BUILD_TIME=$BUILD_TIME
 
     - name: Deploy to Cloud Run
       run: |
