@@ -30,9 +30,22 @@ jobs:
       with:
         project_id: ${{ secrets.PROJECT_ID }}
 
-    - name: Build and push Docker image
+    - name: Build and push Docker image with version info
       run: |
-        gcloud builds submit --tag $IMAGE .
+        # Create build metadata
+        BUILD_COMMIT=${{ github.sha }}
+        BUILD_VERSION=${{ github.ref_name }}-${{ github.sha }}
+        BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+        echo "Building image with metadata:"
+        echo "  Commit: $BUILD_COMMIT"
+        echo "  Version: $BUILD_VERSION"
+        echo "  Time: $BUILD_TIME"
+
+        gcloud builds submit \
+          --tag $IMAGE \
+          --substitutions=_BUILD_COMMIT="$BUILD_COMMIT",_BUILD_VERSION="$BUILD_VERSION",_BUILD_TIME="$BUILD_TIME"
+
 
     - name: Deploy to Cloud Run
       run: |
