@@ -1,5 +1,5 @@
 import express from 'express';
-const cors = require('cors');
+import cors from 'cors';
 
 const VERSION_INFO = {
   version: process.env.BUILD_VERSION || 'unknown',
