@@ -35,7 +35,6 @@ jobs:
     - name: Set ALLOWED_ORIGIN from secret
       run: echo "ALLOWED_ORIGIN=${{ secrets.FRONTEND_URL }}" >> $GITHUB_ENV
 
-
     - name: Build and push Docker image with version info
       run: |
         BUILD_COMMIT=${{ github.sha }}
@@ -53,9 +52,19 @@ jobs:
 
     - name: Deploy to Cloud Run
       run: |
+        DB_USER_SECRET=db_user
+        DB_PASS_SECRET=db_password
+        DB_NAME_SECRET=db_name
+        INSTANCE_SECRET=instance_connection
+
         gcloud run deploy $SERVICE_NAME \
           --image $IMAGE \
           --region $REGION \
           --platform managed \
           --allow-unauthenticated \
-          --set-env-vars=ALLOWED_ORIGIN=$ALLOWED_ORIGIN
+          --set-env-vars=ALLOWED_ORIGIN=$ALLOWED_ORIGIN \
+          --set-secrets=DB_USER=$DB_USER_SECRET:latest \
+          --set-secrets=DB_PASSWORD=$DB_PASS_SECRET:latest \
+          --set-secrets=DB_NAME=$DB_NAME_SECRET:latest \
+          --set-secrets=INSTANCE_CONNECTION=$INSTANCE_SECRET:latest \
+          --add-cloudsql-instances=$(gcloud secrets versions access latest --secret="$INSTANCE_SECRET")
