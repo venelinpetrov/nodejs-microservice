@@ -1,4 +1,5 @@
-name: Deploy NodeJS Microservice Sample
+name: Deploy NodeJS Microservice
+
 on:
   push:
     branches:
@@ -16,6 +17,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -29,6 +31,10 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
       with:
         project_id: ${{ secrets.PROJECT_ID }}
+
+    - name: Set ALLOWED_ORIGIN from secret
+      run: echo "ALLOWED_ORIGIN=${{ secrets.FRONTEND_URL }}" >> $GITHUB_ENV
+
 
     - name: Build and push Docker image with version info
       run: |
@@ -44,10 +50,12 @@ jobs:
         gcloud builds submit \
           --config cloudbuild.yml \
           --substitutions=_BUILD_COMMIT="$BUILD_COMMIT",_BUILD_VERSION="$BUILD_VERSION",_BUILD_TIME="$BUILD_TIME",_IMAGE="$IMAGE"
+
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy $SERVICE_NAME \
           --image $IMAGE \
           --region $REGION \
           --platform managed \
-          --allow-unauthenticated
+          --allow-unauthenticated \
+          --set-env-vars=ALLOWED_ORIGIN=$ALLOWED_ORIGIN
