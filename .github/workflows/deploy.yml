@@ -32,13 +32,9 @@ jobs:
       with:
         project_id: ${{ secrets.PROJECT_ID }}
 
-    - name: Set ALLOWED_ORIGIN based on branch
-      run: |
-        if [[ "${{ github.ref_name }}" == "production" ]]; then
-          echo "ALLOWED_ORIGIN=https://frontend-production-${{ secrets.PROJECT_ID }}.${{ secrets.REGION }}.run.app" >> $GITHUB_ENV
-        else
-          echo "ALLOWED_ORIGIN=https://frontend-staging-${{ secrets.PROJECT_ID }}.${{ secrets.REGION }}.run.app" >> $GITHUB_ENV
-        fi
+    - name: Set ALLOWED_ORIGIN from secret
+      run: echo "ALLOWED_ORIGIN=${{ secrets.FRONTEND_URL }}" >> $GITHUB_ENV
+
 
     - name: Build and push Docker image with version info
       run: |
