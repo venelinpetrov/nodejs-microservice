@@ -67,4 +67,4 @@ jobs:
           --set-secrets=DB_PASSWORD=$DB_PASS_SECRET:latest \
           --set-secrets=DB_NAME=$DB_NAME_SECRET:latest \
           --set-secrets=INSTANCE_CONNECTION=$INSTANCE_SECRET:latest \
-          --add-cloudsql-instances=INSTANCE_SECRET:latest
+          --add-cloudsql-instances=${{ secrets.INSTANCE_CONNECTION }}
