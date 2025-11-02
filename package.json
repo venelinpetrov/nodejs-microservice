@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "NODE_ENV=development nodemon index.js",
+    "dev": "dotenv -e .env.development -- nodemon index.js",
     "lint": "eslint",
     "fix": "eslint --fix",
     "build-image": "gcloud builds submit --pack image=us-central1-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/samples/microservice-template:manual",
@@ -24,6 +24,7 @@
     "express": "^5.0.0",
     "gcp-metadata": "^8.0.0",
     "google-auth-library": "^10.0.0",
+    "mysql2": "^3.15.3",
     "pino": "^10.0.0",
     "pino-http": "^11.0.0"
   },
