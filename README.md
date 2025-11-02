@@ -1,4 +1,4 @@
-# Development and deployment configuration for nodejs backend
+# Development and (Google Cloud) deployment configuration for Node.js backend
 
 ## Start local
 
